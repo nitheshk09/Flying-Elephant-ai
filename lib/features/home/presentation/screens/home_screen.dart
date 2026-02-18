@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../search/presentation/providers/search_providers.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../../../chat/presentation/providers/chat_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -11,30 +12,49 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // 1. Mesh Gradient Background
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF0A0A0A),
-                gradient: RadialGradient(
-                  center: Alignment(-0.8, -0.6),
-                  radius: 1.5,
-                  colors: [Color(0xFF1A1A1E), Color(0xFF0A0A0A)],
-                ),
-              ),
+      backgroundColor: const Color(0xFF000000),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _RoundButton(
+            icon: Icons.menu_rounded,
+            onTap: () {},
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _RoundButton(
+              icon: Icons.call_made_rounded, // or a custom arrow icon
+              onTap: () {},
+              iconColor: Colors.blueAccent.shade100,
             ),
           ),
-          
-          // Subtle accent glows
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: Stack(
+        children: [
+          // Subtle radial glow behind logo
           Positioned(
-            top: -100, right: -100,
-            child: Container(
-              width: 300, height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFFD4D4D8).withOpacity(0.03),
+            top: MediaQuery.of(context).size.height * 0.2,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.blueAccent.withOpacity(0.05),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -43,117 +63,92 @@ class HomeScreen extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 80),
-                  
-                  // 2. Premium Branding
-                  ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [Color(0xFFF5F5F7), Color(0xFFAEAEB2)],
-                    ).createShader(bounds),
-                    child: Text('FLYING\nELEPHANT AI',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 2,
-                        height: 0.9,
-                      )),
+                  const SizedBox(height: 20),
+                  // Header
+                  Text(
+                    'Ready to build, Alex?',
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -0.5,
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  Text('Your intelligent urban assistant.',
-                    textAlign: TextAlign.center,
+                  const SizedBox(height: 4),
+                  Text(
+                    "What's on the roadmap today?",
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: const Color(0xFF6E6E73),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Let's create something grand",
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF636366),
-                      letterSpacing: 0.5,
-                    )),
-
-                  const Spacer(),
-
-                  // 3. Ultra-Sleek Search Bar
-                  GestureDetector(
-                    onTap: () => context.push('/search'),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1C1C1E).withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFF2C2C2E), width: 0.5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.4),
-                            blurRadius: 30,
-                            offset: const Offset(0, 15),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.search_rounded, color: Color(0xFF8E8E93), size: 22),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Text('How can I help you today?',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: const Color(0xFF636366),
-                                fontSize: 16,
-                              )),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF2C2C2E),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(Icons.arrow_upward_rounded, 
-                              color: Color(0xFFF5F5F7), size: 16),
-                          ),
-                        ],
-                      ),
+                      color: const Color(0xFF424245),
+                      fontStyle: FontStyle.italic,
                     ),
                   ),
 
-                  const SizedBox(height: 32),
+                  const Spacer(flex: 2),
 
-                  // 4. Integrated Action Grid
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    alignment: WrapAlignment.center,
+                  // Center Logo
+                  Container(
+                    width: 180,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFF1C1C1E),
+                        width: 1,
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(30),
+                    child: Image.asset(
+                      'assets/FLYINGELEPHANTLOGO.png',
+                      fit: BoxFit.contain,
+                    ).animate().fadeIn(duration: 1000.ms).scale(delay: 200.ms),
+                  ),
+
+                  const Spacer(flex: 3),
+
+                  // Action List
+                  Column(
                     children: [
-                      _CompactAction(
-                        icon: Icons.directions_car_rounded,
-                        label: 'Auto',
+                      _ActionCard(
+                        icon: Icons.directions_car_filled_outlined,
+                        label: 'Find a Car',
                         onTap: () => _openVehicleChat(context, ref),
                       ),
-                      _CompactAction(
-                        icon: Icons.local_hospital_rounded,
-                        label: 'Health',
+                      const SizedBox(height: 12),
+                      _ActionCard(
+                        icon: Icons.assignment_turned_in_outlined,
+                        label: 'Treatment Plan',
                         onTap: () {
-                          ref.read(searchControllerProvider.notifier).search('Top endodontists in NYC');
-                          context.push('/search');
+                          ref.read(chatControllerProvider.notifier).sendMessage('Top endodontists in NYC');
+                          context.push('/chat');
                         },
                       ),
-                      _CompactAction(
-                        icon: Icons.laptop_mac_rounded,
-                        label: 'Tech',
+                      const SizedBox(height: 12),
+                      _ActionCard(
+                        icon: Icons.near_me_outlined,
+                        label: 'Products Near Me',
                         onTap: () {
-                          ref.read(searchControllerProvider.notifier).search('MacBook Pro M4 price');
-                          context.push('/search');
-                        },
-                      ),
-                      _CompactAction(
-                        icon: Icons.school_rounded,
-                        label: 'Learn',
-                        onTap: () {
-                          ref.read(searchControllerProvider.notifier).search('Best NYU prep courses');
-                          context.push('/search');
+                          ref.read(chatControllerProvider.notifier).sendMessage('MacBook Pro M4 price');
+                          context.push('/chat');
                         },
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 40),
+
+                  // Bottom Search Bar
+                  _BottomSearchBar(
+                    onTap: () => context.push('/chat'),
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -172,43 +167,108 @@ class HomeScreen extends ConsumerWidget {
       builder: (ctx) => _VehicleChatSheet(
         onSubmit: (query) {
           Navigator.of(ctx).pop();
-          ref.read(searchControllerProvider.notifier).search(query);
-          context.push('/search');
+          ref.read(chatControllerProvider.notifier).sendMessage(query);
+          context.push('/chat');
         },
       ),
     );
   }
 }
 
-class _CompactAction extends StatelessWidget {
+class _RoundButton extends StatelessWidget {
   final IconData icon;
-  final String label;
   final VoidCallback onTap;
-  const _CompactAction({required this.icon, required this.label, required this.onTap});
+  final Color? iconColor;
+
+  const _RoundButton({required this.icon, required this.onTap, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        width: 44,
+        height: 44,
         decoration: BoxDecoration(
           color: const Color(0xFF1C1C1E),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFF2C2C2E), width: 0.5),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: iconColor ?? Colors.white, size: 20),
+      ),
+    );
+  }
+}
+
+class _ActionCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _ActionCard({required this.icon, required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0D0D0F),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF1C1C1E), width: 1),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: const Color(0xFFF5F5F7), size: 16),
-            const SizedBox(width: 8),
-            Text(label,
-              style: const TextStyle(
-                color: Color(0xFFF5F5F7), 
-                fontSize: 13, 
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.5,
-              )),
+            Icon(icon, color: Colors.blueAccent.shade100, size: 22),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded, color: Color(0xFF3A3A3C), size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomSearchBar extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _BottomSearchBar({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0D0D0F),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: const Color(0xFF1C1C1E), width: 1),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.enhance_photo_translate_rounded, color: Colors.blueAccent, size: 22),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'Ask anything...',
+                style: TextStyle(
+                  color: const Color(0xFF6E6E73),
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            const Icon(Icons.mic_none_rounded, color: Color(0xFF6E6E73), size: 22),
           ],
         ),
       ),

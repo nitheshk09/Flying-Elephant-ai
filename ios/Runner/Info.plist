@@ -43,6 +43,14 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Flying Elephant needs access to your photos to upload images to chat.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Flying Elephant needs access to your camera to take photos for chat.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Flying Elephant needs access to your microphone for voice commands.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Flying Elephant needs access to speech recognition for voice-to-text chat.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
