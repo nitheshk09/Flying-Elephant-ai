@@ -18,7 +18,7 @@ class SearchRepository {
     // Emulator loopback for Android
     // Using actual LAN IP to ensure connectivity from emulator/device
     // If this changes, update it here.
-    return 'http://192.168.29.117:3000';
+    return 'https://breezy-clubs-pull.loca.lt';
   }
 
   Future<SearchIntentModel> getIntent(String query) async {

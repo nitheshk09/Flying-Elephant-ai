@@ -4,15 +4,32 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
+
+// Security Middleware
+app.use(helmet());
+app.use(morgan('combined')); // Production-grade logging
 app.use(cors());
 app.use(express.json());
 
+// Rate Limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: process.env.API_RATE_LIMIT || 100, // Limit each IP
+    message: { error: "Too many requests, please try again later." }
+});
+app.use('/api/', limiter);
+
 const PORT = process.env.PORT || 3000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 const SARVAM_KEY = process.env.SARVAM_API_KEY;
 const SARVAM_URL = "https://api.sarvam.ai/v1/chat/completions";
 
+console.log(`[Config] Environment: ${NODE_ENV}`);
 console.log(`[Config] SARVAM_API_KEY: ${SARVAM_KEY ? 'Loaded ✅' : 'MISSING ❌'}`);
 
 // ------------------------------------------------------------------
@@ -59,7 +76,12 @@ function parseJSON(raw, fallback) {
 }
 
 app.get('/', (req, res) => {
-    res.json({ message: "Flying Elephant Ai Orchestrator is running." });
+    res.json({
+        status: "Running",
+        service: "Flying Elephant Ai Orchestrator",
+        environment: NODE_ENV,
+        timestamp: new Date().toISOString()
+    });
 });
 
 // ------------------------------------------------------------------
@@ -227,10 +249,6 @@ function enrichWithLogos(results) {
     });
 }
 
-// Health check
-app.get('/', (req, res) => {
-    res.send('AI Concierge Server Running!');
-});
-
 app.listen(PORT, '0.0.0.0', () => {
+    console.log(`[Server] Flying Elephant Orchestrator running on port ${PORT}`);
 });
